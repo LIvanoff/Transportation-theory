@@ -465,17 +465,24 @@ int main()
 	setlocale(0, "");
 
 	Matrix A(4, 4);
-	//vector <int> transport_data_vector = { 0, 20, 10, 15, 75, 40, 1, 7, 2, 5, 30, 3, 8, 4, 1, 50, 6, 3, 5, 3 };
+	vector <int> transport_data_vector = { 0, 60, 40, 120, 100, 70, 4, 8, 1, 6, 80, 3, 5, 3, 4, 90, 2, 6, 4, 3, 8, 1, 4, 5, 3 };
 	
 	vector <int> value_vec1 = { 60, 10, 0, 0,
 								0, 30, 50, 0,
 								0, 0, 70, 20,
 								0, 0, 0, 80 };
+	Matrix B(5, 5);
+
+	B.fillMatrix(value_vec1);
+	A.printMatrix();
+	//cout << "Метод минимальной стоимости: " << A.printMatrix() << endl;
+	B.fillMatrix(value_vec1);
 	A.fillMatrix(value_vec1);
 	A.start();
-	A.printMatrix();
-
-	//cout << "Метод минимальной стоимости: " << A.mininmumCost() << endl;
+	Matrix C(5, 5);
+	C.fillMatrix(value_vec1);
+	cout << "Метод северозападного угла: " <<B.northwestCorner();
 
 	//cout << "Метод северозападного угла: " << B.northwestCorner() << endl;
+	B.printMatrix();
 }
