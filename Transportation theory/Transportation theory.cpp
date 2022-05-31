@@ -44,7 +44,8 @@ public:
 		this->size_column = size_column;
 	}
 
-	int mininmumCost()
+	/*
+	int mininmumCost2()
 	{
 		int transport_cost = 0;
 
@@ -78,8 +79,63 @@ public:
 		}
 		return transport_cost;
 	}
+	*/
 
-	int northwestCorner()
+	int mininmumCost()
+	{
+		vector <int> resources = { 70, 80, 90, 80 };
+		vector <int> consumers = { 60, 40, 120, 100 };
+		while(IsItEmpty(resources) || IsItEmpty(consumers))
+		{
+			for(int point = 1; point < 6; point++)
+			{
+				for (int i = 0; i < size_row; i++)
+				{
+					for (int j = 0; j < size_column; j++)
+					{
+						if(price_matrix[i][j] == point)
+						{
+							if (resources.at(i) < consumers.at(j) && resources.at(i) != 0 && consumers.at(j) !=0)
+							{
+								matrix[i][j] += resources[i];
+								consumers[j] -= resources[i];
+								resources[i] -= resources[i];
+							}
+							else if (resources.at(i) == consumers.at(j) && resources.at(i) != 0 && consumers.at(j) != 0)
+							{
+								matrix[i][j] = consumers[j];
+								resources[i] -= consumers[j];
+								consumers.erase(consumers.begin() + i);
+							}
+							else if(resources.at(i) > consumers.at(j) && resources.at(i) != 0 && consumers.at(j) != 0)
+							{
+								matrix[i][j] += resources.at(i) - (resources.at(i) - consumers.at(j));
+								resources[i] -= consumers[j];
+								consumers[j] -= consumers[j];
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	bool IsItEmpty(vector<int> &vec)
+	{
+		for (auto c : vec)
+		{
+			if (c > 0)
+			{
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	/*
+	int northwestCorner1()
 	{
 		int transport_cost = 0;
 
@@ -110,6 +166,39 @@ public:
 		}
 		return transport_cost;
 	}
+	*/
+
+	void northwestCorner()
+	{
+		vector <int> resources = {70, 80, 90, 80};
+		vector <int> consumers = {60, 40, 120, 100 };
+		
+		for (int i = 0; i < this->size_row; i++) 
+		{
+			for (int j = 0; j < this->size_column; j++) 
+			{
+				if (resources.at(i) < consumers.at(j) && resources.at(i) != 0 && consumers.at(j) != 0)
+				{
+					matrix[i][j] += resources[i];
+					consumers[j] -= resources[i];
+					resources[i] -= resources[i];
+				}
+				else if (resources.at(i) == consumers.at(j) && resources.at(i) != 0 && consumers.at(j) != 0)
+				{
+					matrix[i][j] = consumers[j];
+					resources[i] -= consumers[j];
+					consumers.erase(consumers.begin() + i);
+				}
+				else if (resources.at(i) > consumers.at(j) && resources.at(i) != 0 && consumers.at(j) != 0)
+				{
+					matrix[i][j] += resources.at(i) - (resources.at(i) - consumers.at(j));
+					resources[i] -= consumers[j];
+					consumers[j] -= consumers[j];
+				}
+			}
+		}
+	}
+	
 
 	void fillMatrix(vector <int> matrix)
 	{
@@ -128,6 +217,16 @@ public:
 		for (int i = 0; i < size_row; i++) {
 			for (int j = 0; j < size_column; j++) {
 				cout << right << setw(4) << this->matrix[i][j];
+			}
+			cout << endl;
+		}
+		cout << endl;
+	}
+	void printPriceMatrix()
+	{
+		for (int i = 0; i < size_row; i++) {
+			for (int j = 0; j < size_column; j++) {
+				cout << right << setw(4) << this->price_matrix[i][j];
 			}
 			cout << endl;
 		}
@@ -234,7 +333,7 @@ public:
 				}
 			}
 		}
-		cout << "F = " << this->func<<endl;
+		cout << " F = " << this->func<<endl;
 	}
 
 	void min_func() // нахождение минимального элемента
@@ -449,7 +548,6 @@ public:
 			calculating();
 			printMatrix();
 		}
-		target_func();
 	}
 	int getSize_row() { return this->size_row; }
 
@@ -464,18 +562,48 @@ int main()
 {
 	setlocale(0, "");
 
-	Matrix A(4, 4);
-	//vector <int> transport_data_vector = { 0, 20, 10, 15, 75, 40, 1, 7, 2, 5, 30, 3, 8, 4, 1, 50, 6, 3, 5, 3 };
+	vector <int> transport_data_vector2 = { 0, 20, 10, 15, 75, 40, 1, 7, 2, 5, 30, 3, 8, 4, 1, 50, 6, 3, 5, 3 };
 	
 	vector <int> value_vec1 = { 60, 10, 0, 0,
 								0, 30, 50, 0,
 								0, 0, 70, 20,
 								0, 0, 0, 80 };
+	vector <int> value_vec2 = { 0, 0, 0, 0,
+							0, 0, 0, 0,
+							0, 0, 0, 0,
+							0, 0, 0, 0 };
+
+	Matrix C(4, 4);
+	C.fillMatrix(value_vec2);
+	cout << "Метод минимальной стоимости>>> " << endl;
+	C.printPriceMatrix();
+	C.mininmumCost();
+	C.printMatrix();
+	C.target_func();
+	
+	Matrix D(4, 4);
+	D.fillMatrix(value_vec2);
+	cout << "Метод северо-западного угла>>> " << endl;
+	D.printPriceMatrix();
+	D.northwestCorner();
+	D.printMatrix();
+	D.target_func();
+	cout << "Метод потенциалов>>> " << endl;
+	D.start();
+	D.target_func();
+
+	/*
+	Matrix A(4, 4);
 	A.fillMatrix(value_vec1);
+	cout << "Метод потенциалов>>> " << endl;
 	A.start();
 	A.printMatrix();
-
-	//cout << "Метод минимальной стоимости: " << A.mininmumCost() << endl;
-
-	//cout << "Метод северозападного угла: " << B.northwestCorner() << endl;
+	
+	
+	Matrix B(5, 5);
+	vector <int> transport_data_vector1 = { 0, 60, 40, 120, 100, 70, 4, 8, 1, 6, 80, 3, 5, 3, 4, 90, 2, 6, 4, 5, 80, 1,4 ,5 ,3 };
+	B.fillMatrix(transport_data_vector1);
+	cout << "Метод северо-западного угла>>> " << endl;
+	cout << "Метод северо-западного угла: " << B.northwestCorner() << endl<<endl;
+	*/
 }
