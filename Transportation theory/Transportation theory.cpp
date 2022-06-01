@@ -44,7 +44,7 @@ public:
 		this->size_column = size_column;
 	}
 
-	/*
+	/* 
 	int mininmumCost2()
 	{
 		int transport_cost = 0;
@@ -81,7 +81,7 @@ public:
 	}
 	*/
 
-	int mininmumCost()
+	void mininmumCost()
 	{
 		vector <int> resources = { 70, 80, 90, 80 };
 		vector <int> consumers = { 60, 40, 120, 100 };
@@ -118,8 +118,6 @@ public:
 				}
 			}
 		}
-
-		return 0;
 	}
 
 	bool IsItEmpty(vector<int> &vec)
@@ -353,12 +351,8 @@ public:
 		min_vec.clear();
 	}
 
-	// поиск цикла
-
-	void searchLoop(int i, int j)
+	void searchLoop(int i, int j) // поиск цикла
 	{
-		//cout << "i = " << i<<endl;
-		//cout << "j = " << j << endl;
 		matrix_plus_minus[i][j] = '+';
 		if ((j != 0) && !way)
 		{
@@ -535,15 +529,6 @@ public:
 									{'0', '0', '0', '0'},
 									{'0', '0', '0', '0'} };
 			searchLoop(potential_i, potential_j);
-			/*
-			for (int i = 0; i < size_row; i++)
-			{
-				for (int j = 0; j < size_column; j++)
-				{
-					cout << matrix_plus_minus[i][j];
-				}
-				cout << endl;
-			}*/
 			min_func();
 			calculating();
 			printMatrix();
@@ -561,8 +546,6 @@ public:
 int main()
 {
 	setlocale(0, "");
-
-	vector <int> transport_data_vector2 = { 0, 20, 10, 15, 75, 40, 1, 7, 2, 5, 30, 3, 8, 4, 1, 50, 6, 3, 5, 3 };
 	
 	vector <int> value_vec1 = { 60, 10, 0, 0,
 								0, 30, 50, 0,
@@ -576,7 +559,6 @@ int main()
 	Matrix C(4, 4);
 	C.fillMatrix(value_vec2);
 	cout << "Метод минимальной стоимости>>> " << endl;
-	C.printPriceMatrix();
 	C.mininmumCost();
 	C.printMatrix();
 	C.target_func();
@@ -591,19 +573,4 @@ int main()
 	cout << "Метод потенциалов>>> " << endl;
 	D.start();
 	D.target_func();
-
-	/*
-	Matrix A(4, 4);
-	A.fillMatrix(value_vec1);
-	cout << "Метод потенциалов>>> " << endl;
-	A.start();
-	A.printMatrix();
-	
-	
-	Matrix B(5, 5);
-	vector <int> transport_data_vector1 = { 0, 60, 40, 120, 100, 70, 4, 8, 1, 6, 80, 3, 5, 3, 4, 90, 2, 6, 4, 5, 80, 1,4 ,5 ,3 };
-	B.fillMatrix(transport_data_vector1);
-	cout << "Метод северо-западного угла>>> " << endl;
-	cout << "Метод северо-западного угла: " << B.northwestCorner() << endl<<endl;
-	*/
 }
